@@ -328,6 +328,8 @@ func (w *worker) _next() {
 	w.sentryHub.ConfigureScope(func(scope *sentry.Scope) {
 		scope.SetTag("event_id", inputRoomEvent.Event.EventID())
 	})
+	roomserverInputBackpressure.With(prometheus.Labels{}).Inc()
+	defer roomserverInputBackpressure.With(prometheus.Labels{}).Dec()
 
 	// Process the room event. If something goes wrong then we'll tell
 	// NATS to terminate the message. We'll store the error result as
@@ -486,5 +488,5 @@ var roomserverInputBackpressure = prometheus.NewGaugeVec(
 		Name:      "input_backpressure",
 		Help:      "How many events are queued for input for a given room",
 	},
-	[]string{"room_id"},
+	[]string{},
 )

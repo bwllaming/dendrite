@@ -65,7 +65,7 @@ var processRoomEventDuration = prometheus.NewHistogramVec(
 			7000, 8000, 9000, 10000, 15000, 20000,
 		},
 	},
-	[]string{"room_id"},
+	[]string{},
 )
 
 // processRoomEvent can only be called once at a time
@@ -98,9 +98,7 @@ func (r *Inputer) processRoomEvent(
 	started := time.Now()
 	defer func() {
 		timetaken := time.Since(started)
-		processRoomEventDuration.With(prometheus.Labels{
-			"room_id": input.Event.RoomID().String(),
-		}).Observe(float64(timetaken.Milliseconds()))
+		processRoomEventDuration.With(prometheus.Labels{}).Observe(float64(timetaken.Milliseconds()))
 	}()
 
 	// Parse and validate the event JSON
