@@ -217,6 +217,7 @@ func (p *PDUStreamProvider) IncrementalSync(
 				Backwards: true,
 			}
 		}
+		req.Log.WithField("delta", delta).WithField("eventfilter", eventFilter).WithField("statefilter", stateFilter).WithField("range", newRange).Debug("Adding room delta to response")
 		var pos types.StreamPosition
 		if pos, err = p.addRoomDeltaToResponse(ctx, snapshot, req.Device, newRange, delta, &eventFilter, &stateFilter, req); err != nil {
 			req.Log.WithError(err).Error("d.addRoomDeltaToResponse failed")
