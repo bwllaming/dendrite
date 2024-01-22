@@ -50,25 +50,21 @@ var streams = []*nats.StreamConfig{
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
 		MaxAge:    time.Hour * 24,
-		Replicas:  1,
 	},
 	{
 		Name:      InputDeviceListUpdate,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      InputSigningKeyUpdate,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputRoomEvent,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputAppserviceEvent,
@@ -79,13 +75,11 @@ var streams = []*nats.StreamConfig{
 		Name:      OutputSendToDeviceEvent,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputKeyChangeEvent,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputTypingEvent,
@@ -97,19 +91,16 @@ var streams = []*nats.StreamConfig{
 		Name:      OutputClientData,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputReceiptEvent,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputNotificationData,
 		Retention: nats.InterestPolicy,
 		Storage:   nats.FileStorage,
-		Replicas:  1,
 	},
 	{
 		Name:      OutputPresenceEvent,

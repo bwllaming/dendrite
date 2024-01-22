@@ -141,6 +141,8 @@ func setupNATS(process *process.ProcessContext, cfg *config.JetStream, nc *natsc
 				fallthrough
 			case info.Config.Storage != stream.Storage:
 				fallthrough
+			case info.Config.Replicas != stream.Replicas:
+				fallthrough
 			case info.Config.MaxAge != stream.MaxAge:
 				// Try updating the stream first, as many things can be updated
 				// non-destructively.
