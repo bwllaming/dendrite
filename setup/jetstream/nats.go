@@ -226,6 +226,7 @@ func setupNATS(process *process.ProcessContext, cfg *config.JetStream, nc *natsc
 			if err != nil || consumerInfo == nil {
 				continue
 			}
+			logrus.WithField("stream", streamName).WithField("consumer", consumerName).Debug("Deleting consumer")
 			if err = s.DeleteConsumer(streamName, consumerName); err != nil {
 				logrus.WithError(err).Errorf("Unable to clean up old consumer %q for stream %q", consumer, stream)
 			}
