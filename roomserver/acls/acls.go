@@ -46,27 +46,8 @@ type ServerACLs struct {
 }
 
 func NewServerACLs(db ServerACLDatabase) *ServerACLs {
-	ctx := context.TODO()
 	acls := &ServerACLs{
 		acls: make(map[string]*serverACL),
-	}
-	// Look up all of the rooms that the current state server knows about.
-	rooms, err := db.GetKnownRooms(ctx)
-	if err != nil {
-		logrus.WithError(err).Fatalf("Failed to get known rooms")
-	}
-	// For each room, let's see if we have a server ACL state event. If we
-	// do then we'll process it into memory so that we have the regexes to
-	// hand.
-	for _, room := range rooms {
-		state, err := db.GetStateEvent(ctx, room, MRoomServerACL, "")
-		if err != nil {
-			logrus.WithError(err).Errorf("Failed to get server ACLs for room %q", room)
-			continue
-		}
-		if state != nil {
-			acls.OnServerACLUpdate(state.PDU)
-		}
 	}
 	return acls
 }
