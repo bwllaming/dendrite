@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/tidwall/gjson"
@@ -340,6 +341,9 @@ func (r *Inputer) processRoomEvent(
 		softfail, err = helpers.CheckForSoftFail(ctx, r.DB, roomInfo, headered, input.StateEventIDs, r.Queryer)
 		if err != nil {
 			logger.WithError(err).Warn("Error authing soft-failed event")
+			if strings.Contains(err.Error(), "not in room") {
+				softfail = false
+			}
 		}
 	}
 
