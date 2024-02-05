@@ -363,7 +363,7 @@ func (w *worker) _next() {
 		// the message may already have been queued for redelivery or will be, so this makes sure that we still reprocess the msg
 		// after restarting. We only Ack if the context was not yet canceled.
 		if w.r.ProcessContext.Context().Err() == nil {
-			if err := msg.AckSync(); err != nil {
+			if err = msg.AckSync(); err != nil {
 				logrus.WithError(err).WithFields(logrus.Fields{
 					"room_id":  w.roomID,
 					"event_id": inputRoomEvent.Event.EventID(),
@@ -379,7 +379,7 @@ func (w *worker) _next() {
 		}
 		errString = err.Error()
 	} else {
-		if err := msg.AckSync(); err != nil {
+		if err = msg.AckSync(); err != nil {
 			logrus.WithError(err).WithFields(logrus.Fields{
 				"room_id":  w.roomID,
 				"event_id": inputRoomEvent.Event.EventID(),
