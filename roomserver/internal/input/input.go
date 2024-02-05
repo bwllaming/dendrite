@@ -363,11 +363,29 @@ func (w *worker) _next() {
 		// the message may already have been queued for redelivery or will be, so this makes sure that we still reprocess the msg
 		// after restarting. We only Ack if the context was not yet canceled.
 		if w.r.ProcessContext.Context().Err() == nil {
-			_ = msg.AckSync()
+			if err := msg.AckSync(); err != nil {
+				logrus.WithError(err).WithFields(logrus.Fields{
+					"room_id":  w.roomID,
+					"event_id": inputRoomEvent.Event.EventID(),
+					"type":     inputRoomEvent.Event.Type(),
+				}).Error("Roomserver failed to ack error event")
+			}
+		} else {
+			logrus.WithFields(logrus.Fields{
+				"room_id":  w.roomID,
+				"event_id": inputRoomEvent.Event.EventID(),
+				"type":     inputRoomEvent.Event.Type(),
+			}).Warn("Roomserver failed to ack error event because context was canceled")
 		}
 		errString = err.Error()
 	} else {
-		_ = msg.AckSync()
+		if err := msg.AckSync(); err != nil {
+			logrus.WithError(err).WithFields(logrus.Fields{
+				"room_id":  w.roomID,
+				"event_id": inputRoomEvent.Event.EventID(),
+				"type":     inputRoomEvent.Event.Type(),
+			}).Error("Roomserver failed to ack event")
+		}
 	}
 
 	// If it was a synchronous input request then the "sync" field
