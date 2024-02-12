@@ -312,7 +312,7 @@ func (w *worker) _next() {
 	}
 
 	// Since we either Ack() or Term() the message at this point, we can defer decrementing the room backpressure
-	defer roomserverInputBackpressure.With(prometheus.Labels{"room_id": w.roomID}).Dec()
+	defer roomserverInputBackpressure.With(prometheus.Labels{}).Dec()
 
 	// Try to unmarshal the input room event. If the JSON unmarshalling
 	// fails then we'll terminate the message — this notifies NATS that
@@ -458,7 +458,7 @@ func (r *Inputer) queueInputRoomEvents(
 		}
 
 		// Now that the event is queued, increment the room backpressure
-		roomserverInputBackpressure.With(prometheus.Labels{"room_id": roomID}).Inc()
+		roomserverInputBackpressure.With(prometheus.Labels{}).Inc()
 	}
 	return
 }
