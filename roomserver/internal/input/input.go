@@ -341,6 +341,8 @@ func (w *worker) _next() {
 		spec.ServerName(msg.Header.Get("virtual_host")),
 		&inputRoomEvent,
 	); err != nil {
+		errString = err.Error()
+
 		switch err.(type) {
 		case types.RejectedError:
 			// Don't send events that were rejected to Sentry
@@ -363,7 +365,7 @@ func (w *worker) _next() {
 		// the message may already have been queued for redelivery or will be, so this makes sure that we still reprocess the msg
 		// after restarting. We only Ack if the context was not yet canceled.
 		if w.r.ProcessContext.Context().Err() == nil {
-			if err = msg.AckSync(); err != nil {
+			if err := msg.AckSync(); err != nil {
 				logrus.WithError(err).WithFields(logrus.Fields{
 					"room_id":  w.roomID,
 					"event_id": inputRoomEvent.Event.EventID(),
@@ -377,9 +379,8 @@ func (w *worker) _next() {
 				"type":     inputRoomEvent.Event.Type(),
 			}).Warn("Roomserver failed to ack error event because context was canceled")
 		}
-		errString = err.Error()
 	} else {
-		if err = msg.AckSync(); err != nil {
+		if err := msg.AckSync(); err != nil {
 			logrus.WithError(err).WithFields(logrus.Fields{
 				"room_id":  w.roomID,
 				"event_id": inputRoomEvent.Event.EventID(),
